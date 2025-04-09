@@ -1,0 +1,18 @@
+{
+  "projects": {
+    "default": "admin-template-77844"
+  },
+  "targets": {
+    "admin-template-77844": {
+      "hosting": {
+        "production": [
+          "admin-template-prod"
+        ],
+        "staging": [
+          "admin-template-staging"
+        ]
+      }
+    }
+  },
+  "etags": {}
+}
