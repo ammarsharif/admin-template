@@ -62,6 +62,7 @@ export default function GenericTable<T>({
   ExpandingDetailComponent,
   addPageRoute
 }: GenericTableProps<T>) {
+  console.log("data", data);
   const theme = useTheme();
   const [sorting, setSorting] = useState<SortingState>([{ id: 'id', desc: true }]);
   const [rowSelection, setRowSelection] = useState({});
@@ -95,7 +96,7 @@ export default function GenericTable<T>({
         <DebouncedInput
           value={globalFilter}
           onFilterChange={(value) => setGlobalFilter(String(value))}
-          placeholder={`Search ${data.length} records...`}
+          // placeholder={`Search ${data.length} records...`}
         />
         <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems="center">
           <SelectColumnSorting getState={table.getState} getAllColumns={table.getAllColumns} setSorting={setSorting} />
@@ -110,7 +111,7 @@ export default function GenericTable<T>({
       </Stack>
       <ScrollX>
         <Stack>
-          <RowSelection selected={Object.keys(rowSelection).length} />
+          {/*<RowSelection selected={Object.keys(rowSelection).length} />*/}
           <TableContainer>
             <Table>
               <TableHead>
@@ -137,9 +138,9 @@ export default function GenericTable<T>({
                     </TableRow>
                     {row.getIsExpanded() && ExpandingDetailComponent && (
                       <TableRow sx={{ bgcolor: backColor }}>
-                        <TableCell colSpan={row.getVisibleCells().length}>
-                          <ExpandingDetailComponent data={row.original} />
-                        </TableCell>
+                        {/*<TableCell colSpan={row.getVisibleCells().length}>*/}
+                        {/*  <ExpandingDetailComponent data={row.original} />*/}
+                        {/*</TableCell>*/}
                       </TableRow>
                     )}
                   </Fragment>

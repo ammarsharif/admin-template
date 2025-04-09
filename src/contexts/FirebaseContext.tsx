@@ -45,12 +45,12 @@ const initialState: AuthProps = {
   user: null
 };
 
-const setSession = (serviceToken?: string | null) => {
-  if (serviceToken) {
-    localStorage.setItem('serviceToken', serviceToken);
-    axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
+const setSession = (accessToken?: string | null) => {
+  if (accessToken) {
+    localStorage.setItem('accessToken', accessToken);
+    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   } else {
-    localStorage.removeItem('serviceToken');
+    localStorage.removeItem('accessToken');
     delete axios.defaults.headers.common.Authorization;
   }
 };
@@ -64,9 +64,9 @@ export const FirebaseProvider = ({ children }: { children: React.ReactElement })
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      const serviceToken = window.localStorage.getItem('serviceToken');
-      if (user && serviceToken) {
-        setSession(serviceToken);
+      const accessToken = window.localStorage.getItem('accessToken');
+      if (user && accessToken) {
+        setSession(accessToken);
         dispatch({
           type: LOGIN,
           payload: {

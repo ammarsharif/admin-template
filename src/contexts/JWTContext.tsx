@@ -23,23 +23,23 @@ const initialState: AuthProps = {
   user: null
 };
 
-const verifyToken: (st: string) => boolean = (serviceToken) => {
-  if (!serviceToken) {
+const verifyToken: (st: string) => boolean = (accessToken) => {
+  if (!accessToken) {
     return false;
   }
-  const decoded: KeyedObject = jwtDecode(serviceToken);
+  const decoded: KeyedObject = jwtDecode(accessToken);
   /**
    * Property 'exp' does not exist on type '<T = unknown>(token: string, options?: JwtDecodeOptions | undefined) => T'.
    */
   return decoded.exp > Date.now() / 1000;
 };
 
-const setSession = (serviceToken?: string | null) => {
-  if (serviceToken) {
-    localStorage.setItem('serviceToken', serviceToken);
-    axios.defaults.headers.common.Authorization = `Bearer ${serviceToken}`;
+const setSession = (accessToken?: string | null) => {
+  if (accessToken) {
+    localStorage.setItem('accessToken', accessToken);
+    axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
   } else {
-    localStorage.removeItem('serviceToken');
+    localStorage.removeItem('accessToken');
     delete axios.defaults.headers.common.Authorization;
   }
 };
@@ -54,10 +54,10 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
   useEffect(() => {
     const init = async () => {
       try {
-        const serviceToken = window.localStorage.getItem('serviceToken');
-        if (serviceToken && verifyToken(serviceToken)) {
-          setSession(serviceToken);
-          const response = await axios.get('/api/account/me');
+        const accessToken = window.localStorage.getItem('accessToken');
+        if (accessToken && verifyToken(accessToken)) {
+          setSession(accessToken);
+          const response = await axios.get('/profiles');
           const { user } = response.data;
           dispatch({
             type: LOGIN,
@@ -84,8 +84,8 @@ export const JWTProvider = ({ children }: { children: React.ReactElement }) => {
 
   const login = async (email: string, password: string, portalType: string) => {
     const response = await axios.post('/auth/sign-in', { email, password, portalType });
-    const { serviceToken, user } = response.data;
-    setSession(serviceToken);
+    const { accessToken, user } = response.data;
+    setSession(accessToken);
     dispatch({
       type: LOGIN,
       payload: {

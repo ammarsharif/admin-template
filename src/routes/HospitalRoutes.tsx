@@ -3,31 +3,31 @@ import { lazy } from 'react';
 // project import
 import Loadable from 'components/Loadable';
 
-const Customers = Loadable(lazy(() => import('pages/customers')));
-const ViewCustomer = Loadable(lazy(() => import('pages/customers/viewCustomer')));
-const AddCustomer = Loadable(lazy(() => import('pages/customers/addCustomer')));
-const EditCustomer = Loadable(lazy(() => import('pages/customers/editCustomer')));
+const Hospitals = Loadable(lazy(() => import('pages/hospitals')));
+const ViewHospital = Loadable(lazy(() => import('pages/hospitals/viewHospital')));
+const AddHospital = Loadable(lazy(() => import('pages/hospitals/addHospital')));
+const EditHospital = Loadable(lazy(() => import('pages/hospitals/editHospital')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
 const HospitalRoutes = {
-  path: '/customers',
+  path: '/hospitals',
   children: [
     {
       path: '',
-      element: <Customers />
+      element: <Hospitals />
     },
     {
       path: 'view/:id',
-      element: <ViewCustomer />
+      element: <ViewHospital />
     },
     {
       path: 'add',
-      element: <AddCustomer />
+      element: <AddHospital />
     },
     {
       path: 'edit/:id',
-      element: <EditCustomer />
+      element: <EditHospital />
     }
   ]
 };
