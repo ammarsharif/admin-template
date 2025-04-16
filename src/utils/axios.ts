@@ -1,7 +1,10 @@
 import axios, { AxiosRequestConfig } from 'axios';
 
-const axiosServices = axios.create({ baseURL: import.meta.env.VITE_APP_API_URL || 'http://localhost:3000/' });
+const axiosServices = axios.create({
+  baseURL: import.meta.env.VITE_APP_API_URL || 'http://192.168.1.27:3001/'
+});
 
+console.log('Env:', import.meta.env.MODE, 'Base URL:', axiosServices.defaults.baseURL);
 // ==============================|| AXIOS - FOR MOCK SERVICES ||============================== //
 
 axiosServices.interceptors.request.use(
@@ -37,10 +40,12 @@ export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
   return res.data;
 };
 
-export const fetcherPost = async (args: string | [string, AxiosRequestConfig]) => {
-  const [url, config] = Array.isArray(args) ? args : [args];
-
-  const res = await axiosServices.post(url, { ...config });
-
+export const fetcherPost = async (url: string, data: any, config = {}) => {
+  const res = await axiosServices.post(url, data, { ...config });
   return res.data;
+};
+
+export const fetcherPatch = async (url: string, data: any, config = {}) => {
+  const response = await axiosServices.patch(url, data, config);
+  return response.data;
 };

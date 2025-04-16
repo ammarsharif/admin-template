@@ -1,15 +1,15 @@
 {
   "projects": {
-    "default": "admin-template-77844"
+    "default": "my-firebase-hosting"
   },
   "targets": {
-    "admin-template-77844": {
+    "my-firebase-hosting": {
       "hosting": {
         "production": [
-          "admin-template-prod"
+          "admin-prod"
         ],
         "staging": [
-          "admin-template-staging"
+          "admin-staging"
         ]
       }
     }

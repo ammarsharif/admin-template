@@ -7,55 +7,47 @@ on:
       - staging
 
 jobs:
-  build:
-    name: Build
+  deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
 
-      - name: Install Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
       - name: Install Yarn
         run: npm install -g yarn
 
+      - name: Cache Yarn Dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Install Dependencies
         run: yarn install --immutable
 
-      - name: Build
+      - name: Build (Production or Staging)
         env:
           CI: false
-        run: yarn build
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            yarn build
+          else
+            yarn build:staging
+          fi
 
       - name: Verify Build Directory
         run: ls -lah dist/ || echo "⚠️ Dist directory not found!"
 
-      - name: Archive Build Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: dist/
-          if-no-files-found: error
-
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v3
-
       - name: Install Firebase CLI
-        run: npm install -g firebase-tools
-
-      - name: Download Build Artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: dist
+        run: yarn add -D firebase-tools
 
       - name: Set up Firebase authentication
         run: |
@@ -64,8 +56,8 @@ jobs:
 
       - name: Deploy to Firebase (Staging)
         if: github.ref == 'refs/heads/staging'
-        run: firebase deploy --only hosting:staging --project admin-template-77844
+        run: npx firebase-tools deploy --only hosting:staging --project my-firebase-hosting --debug
 
       - name: Deploy to Firebase (Production)
         if: github.ref == 'refs/heads/main'
-        run: firebase deploy --only hosting:production --project admin-template-77844
+        run: npx firebase-tools deploy --only hosting:production --project my-firebase-hosting --debug

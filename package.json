@@ -122,11 +122,15 @@
   "scripts": {
     "start": "vite",
     "build": "tsc && vite build",
-    "build-stage": "env-cmd -f .env.qa vite build",
+    "build:staging": "env-cmd -f .env.staging vite build",
+    "build:production": "env-cmd -f .env.production vite build",
+    "deploy:staging": "firebase-tools deploy --only hosting:staging --project my-firebase-hosting --debug",
+    "deploy:production": "firebase-tools deploy --only hosting:production --project my-firebase-hosting --debug",
     "preview": "vite preview",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\"",
     "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
-    "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""
+    "prettier": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\"",
+    "prettier:check": "prettier --check \"**/*.{ts,tsx,js,jsx,css}\""
   },
   "eslintConfig": {
     "extends": [
