@@ -34,7 +34,6 @@ export default axiosServices;
 
 export const fetcher = async (args: string | [string, AxiosRequestConfig]) => {
   const [url, config] = Array.isArray(args) ? args : [args];
-
   const res = await axiosServices.get(url, { ...config });
 
   return res.data;
